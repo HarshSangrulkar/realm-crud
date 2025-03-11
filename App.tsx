@@ -1,130 +1,70 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, Text, StyleSheet } from "react-native";
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import NameInput from "./src/components/NameInput";
+import UserDisplay from "./src/components/UserDisplay";
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+//import { realmConfig, User } from "./realmDB/realmConfig";
+// interface UserItem {
+//   id: string; name: string; age: number
+// }
+const App = () => {
+  //const [name, setName] = useState<string>("");
+  //const [age, setAge] = useState<number | null>(null);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  //New states defined, because new component to display user details
+  //const [users, setUsers] = useState<{ id: string; name: string; age: number }[]>([]);
+  //const [users, setUsers] = useState<UserItem[]>([]);
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  // Function to handle submitted name (passed as a prop)
+  // const handleSubmit = (newName: string, newAge: number) => {
+  //   setName(newName);
+  //   setAge(newAge);
+  // };
 
+  // Function to handle user submission
   /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+  const handleSubmit = (newName: string, newAge: number) => {
+    // Create a new user object
+    const newUser = {
+      id: Math.random().toString(), // Generate a unique ID
+      name: newName,
+      age: newAge,
+    };
+
+    // Update state with new user
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+  };
+  */
 
   return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
+    // <SafeAreaView style={styles.container}>
+    //   <Text style={styles.text}>Hello, {name || "Guest"}! Age:{age}</Text>
+    //   <NameInput onSubmit={handleSubmit} />
+    // </SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.text}>Enter Your Details</Text>
+      {/* <NameInput onSubmit={handleSubmit} />
+      <UserDisplay userDisplay={users} />  */}
+      {/* Pass users as props */}
+      {/* <NameInput ></NameInput> */}
+      <UserDisplay></UserDisplay>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  sectionTitle: {
+  text: {
     fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });
 
