@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, Button } from "react-native";
+import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { getAllUsers, deleteUser, updateUser } from "../realmDB/realmCRUD";
 import { ObjectId } from "bson";
 import { User } from "../realmDB/realmConfig";
@@ -16,6 +16,9 @@ const UserDisplay = () => {
     //const [users, setUsers] = useState<{ id: ObjectId(); name: string; age: number }[]>([]);
 
     const [users, setUsers] = useState<User[]>([]);
+
+    const [isEditMode, setIsEditMode] = useState<boolean>(false);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
 
     // const fetchUsers = () => {
@@ -49,15 +52,22 @@ const UserDisplay = () => {
         await refreshUsers();
     };
 
-    const handleUpdate = async (id: number, name: string, age: number) => {
-        await updateUser(id, name, age);
-        //setUser([...getAllUsers()]);
-        await refreshUsers();
-    }
+    // const handleUpdate = async (id: number, name: string, age: number) => {
+    //     await updateUser(id, name, age);
+    //     //setUser([...getAllUsers()]);
+    //     await refreshUsers();
+    // }
+
+    const handleUpdate = async (user: User) => {
+        await setCurrentUser(user);
+        await setIsEditMode(true); // switch to edit mode
+        setCurrentUser(null);
+    };
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>User List</Text>
-            <NameInput setUser={setUsers} />
+
+            <NameInput setUser={setUsers} currentUser={currentUser}
+                setIsEditMode={setIsEditMode} />
             <FlatList
                 data={users}
                 keyExtractor={(item) => item.id.toString()}
@@ -68,8 +78,10 @@ const UserDisplay = () => {
 
 
                         </Text>
-                        <Button title="Edit" onPress={() => handleUpdate(item.id, "Harsh", 21)} />
-                        <Button title="Delete" onPress={() => handleDelete(item.id)} />
+                        {/* <Button title="Edit" onPress={() => handleUpdate(item)} />
+                        <Button title="Delete" onPress={() => handleDelete(item.id)} color={"red"} /> */}
+                        <TouchableOpacity onPress={() => handleUpdate(item)} style={styles.button}><Text style={styles.btnText}>EDIT</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.button}><Text style={styles.btnText}>DELETE</Text></TouchableOpacity>
                     </View>
                 )}
             />
@@ -96,26 +108,28 @@ const styles = StyleSheet.create({
         width: "100%",
         alignItems: "center",
     },
-    heading: {
-        fontSize: 22,
-        fontWeight: "bold",
-        marginBottom: 10,
-    },
-    noData: {
-        fontSize: 16,
-        color: "gray",
-    },
+
     userItem: {
-        padding: 10,
-        marginVertical: 5,
-        backgroundColor: "#f0f0f0",
+        padding: 5,
+        margin: 5,
+        backgroundColor: "lightgray",
         borderRadius: 5,
-        width: "100%",
+        width: 300,
         alignItems: "center",
+        justifyContent: "space-around",
+        flexDirection: "row"
     },
     text: {
         fontSize: 18,
     },
+    button: {
+        padding: 3,
+        margin: 3,
+        color: "blue"
+    },
+    btnText: {
+        color: "red",
+    }
 });
 
 export default UserDisplay;

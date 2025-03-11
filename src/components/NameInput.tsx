@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, Button, StyleSheet } from "react-native";
-import { addUser, getAllUsers } from "../realmDB/realmCRUD";
+import { addUser, getAllUsers, updateUser } from "../realmDB/realmCRUD";
 import { User } from "../realmDB/realmConfig";
 
 // Interface for props (Defining the function inside)
@@ -10,9 +10,11 @@ import { User } from "../realmDB/realmConfig";
 
 interface InputProps {
     setUser: (users: User[]) => void;
+    currentUser?: User | null;
+    setIsEditMode: (isEdit: boolean) => void;//check if in edit mode or not
 }
 //{ onSubmit }: NameInputProps
-const NameInput = ({ setUser }: InputProps) => {
+const NameInput = ({ setUser, currentUser, setIsEditMode }: InputProps) => {
     //const [input, setInput] = useState<string>("");
     //const [age, setAge] = useState<string>("");
     //const [user, setUser] = useState<User[]>([]);
@@ -24,15 +26,35 @@ const NameInput = ({ setUser }: InputProps) => {
     //     setUser([...getAllUsers()]);
     // }, []);
 
+    //if we are editing current user, then fill the input with values   
+    useEffect(() => {
+        if (currentUser) {
+            setName(currentUser.name);
+            setAge(currentUser.age.toString());
+        }
+    }, [currentUser]);
     // Function to handle submit (calls parent function)
     const handleSubmit = async () => {
         const ageNumber = parseInt(age, 10);//10 means its decimal
         //Math.random().toString(), 
-        await addUser(name, ageNumber);
+        //await addUser(name, ageNumber);
+        if (currentUser) {
+            // Update existing user
+            await updateUser(currentUser.id, name, ageNumber);
+            //setIsEditMode(false);
+
+        } else {
+            // Add new user
+            await addUser(name, ageNumber);
+            //setIsEditMode(false);
+        }
         const updatedUsers = await getAllUsers();
         setUser(updatedUsers);
         setName(""); // Clear input field after submission
         setAge("");
+
+
+        setIsEditMode(false); // Exit edit mode
     };
 
     return (
@@ -49,7 +71,11 @@ const NameInput = ({ setUser }: InputProps) => {
                 value={age}
                 onChangeText={setAge}
             />
-            <Button title="Submit" onPress={handleSubmit} />
+            {/* <Button title="Submit" onPress={handleSubmit} /> */}
+            <Button
+                title={currentUser ? "Update" : "Add"}
+                onPress={handleSubmit}
+            />
         </View>
     );
 };
@@ -57,15 +83,16 @@ const NameInput = ({ setUser }: InputProps) => {
 const styles = StyleSheet.create({
     container: {
         marginTop: 50,
-        paddingHorizontal: 20,
+        padding: 20,
     },
     input: {
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: "black",
         borderRadius: 5,
         padding: 10,
         fontSize: 18,
         marginBottom: 10,
+        width: 300,
     },
 });
 
