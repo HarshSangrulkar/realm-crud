@@ -9,12 +9,14 @@ import { User } from "../realmDB/realmConfig";
 // }
 
 interface InputProps {
-    setUser: (users: User[]) => void;
-    currentUser?: User | null;
+    setUser: (users: User[]) => void;//takes an array of User objects as an argument (User[]).
+    currentUser?: User | null;//stores specific User object
     setIsEditMode: (isEdit: boolean) => void;//check if in edit mode or not
+
+    setCurrentUser: (user: User | null) => void;//for update to add after update functionality
 }
 //{ onSubmit }: NameInputProps
-const NameInput = ({ setUser, currentUser, setIsEditMode }: InputProps) => {
+const NameInput = ({ setUser, currentUser, setIsEditMode, setCurrentUser }: InputProps) => {
     //const [input, setInput] = useState<string>("");
     //const [age, setAge] = useState<string>("");
     //const [user, setUser] = useState<User[]>([]);
@@ -55,6 +57,8 @@ const NameInput = ({ setUser, currentUser, setIsEditMode }: InputProps) => {
 
 
         setIsEditMode(false); // Exit edit mode
+        //setUser(null);
+        setCurrentUser(null);//after update func, set current user to null so we can add
     };
 
     return (
@@ -82,7 +86,7 @@ const NameInput = ({ setUser, currentUser, setIsEditMode }: InputProps) => {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 50,
+        margin: 50,
         padding: 20,
     },
     input: {

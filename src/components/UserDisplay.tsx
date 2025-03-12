@@ -61,30 +61,42 @@ const UserDisplay = () => {
     const handleUpdate = async (user: User) => {
         await setCurrentUser(user);
         await setIsEditMode(true); // switch to edit mode
-        setCurrentUser(null);
+        //setCurrentUser(null);
     };
     return (
         <View style={styles.container}>
 
             <NameInput setUser={setUsers} currentUser={currentUser}
-                setIsEditMode={setIsEditMode} />
+                setIsEditMode={setIsEditMode} setCurrentUser={setCurrentUser} />
             <FlatList
                 data={users}
                 keyExtractor={(item) => item.id.toString()}
+
                 renderItem={({ item }) => (
+
                     <View style={styles.userItem}>
                         <Text style={styles.text}>
                             Name: {item.name} Age:{item.age}
 
 
                         </Text>
+
+
                         {/* <Button title="Edit" onPress={() => handleUpdate(item)} />
                         <Button title="Delete" onPress={() => handleDelete(item.id)} color={"red"} /> */}
                         <TouchableOpacity onPress={() => handleUpdate(item)} style={styles.button}><Text style={styles.btnText}>EDIT</Text></TouchableOpacity>
                         <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.button}><Text style={styles.btnText}>DELETE</Text></TouchableOpacity>
                     </View>
                 )}
+                //initialNumToRender={5}//*Render first 5 items initially
+                maxToRenderPerBatch={5} //Render 5 items per batch while scrolling 
+            //windowSize={5}
+            //showsVerticalScrollIndicator={true} //Hide scrollbar
+            //pagingEnabled={true}
+            //removeClippedSubviews={true}
             />
+
+
         </View>
         //     <View style={styles.container}>
         //   <FlatList
@@ -103,7 +115,8 @@ const UserDisplay = () => {
 }
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
+        flex: 1,
+        margin: 20,
         padding: 20,
         width: "100%",
         alignItems: "center",
