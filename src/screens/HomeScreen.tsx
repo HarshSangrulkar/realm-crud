@@ -1,24 +1,25 @@
-import { Button, StyleSheet, Text, View } from "react-native"
+import { View, Text, Button } from "react-native";
+//import { StackScreenProps } from "@react-navigation/stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "./types";
 
-const HomeScreen = ({ navigation }: any) => {
+type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+
+const HomeScreen = ({ navigation }: Props) => {
+    const handleNavigateToDetails = () => {
+        navigation.navigate("Details", { message: "Hello from Home!" });
+    };
+    const handleNavigateToAbout = () => {
+        navigation.navigate("About", { name: "Harsh from Hello!", age: 21 });
+    };
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Home Screen Display</Text>
-            <Button title="Go To About Page" onPress={() => navigation.navigate("About")}></Button>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text>Home Screen</Text>
+            <Button title="Go to Details" onPress={handleNavigateToDetails} />
+            <Button title="Go to About" onPress={handleNavigateToAbout} />
         </View>
-    )
-}
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    text: {
-        fontSize: 20,
-        margin: 10,
-
-    }
-})
+    );
+};
 
 export default HomeScreen;
